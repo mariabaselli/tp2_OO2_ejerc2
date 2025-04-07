@@ -1,24 +1,34 @@
-package org.example;
+package ar.unrn.restaurante;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RestaurantTest {
 
     ItemMenu unaBebida;
     ItemMenu unPlato;
     Mesa unaMesa;
+    FakeRegistroDeCostos registro;
 
 
     @BeforeEach
     void inicializarVariables() {
-        unaBebida = new ItemMenu(2f, "Coca Cola");
-        unPlato = new ItemMenu(10f, "Pizza");
-        unaMesa = Mesa.crearMesa(1);
-        unaMesa.agregarBebida(unaBebida, 1);
-        unaMesa.agregarPlato(unPlato, 1);
+        this.unaBebida = new ItemMenu(2f, "Coca Cola");
+        this.unPlato = new ItemMenu(10f, "Pizza");
+        this.registro = new FakeRegistroDeCostos();
+        this.unaMesa = Mesa.crearMesa(1, registro, new FakeProveedorDeFecha());
+        this.unaMesa.agregarBebida(unaBebida, 1);
+        this.unaMesa.agregarPlato(unPlato, 1);
+    }
+
+    @Test
+    public void verificarRegistroDeCostos() {
+        unaMesa.cerrarMesa(new Visa(), 1);
+        assertTrue(registro.startWith("08/05/2025"));
     }
 
     @Test
@@ -49,6 +59,4 @@ public class RestaurantTest {
         Tarjeta unaTarjeta = new Viedma();
         assertEquals(12.599999F, unaMesa.cerrarMesa(unaTarjeta, 5));
     }
-
-
 }

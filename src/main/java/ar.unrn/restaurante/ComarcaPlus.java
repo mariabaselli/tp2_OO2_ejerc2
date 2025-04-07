@@ -1,4 +1,4 @@
-package org.example;
+package ar.unrn.restaurante;
 
 public class ComarcaPlus implements Tarjeta {
     private static float descuento = 0.98F;

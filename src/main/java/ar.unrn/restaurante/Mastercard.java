@@ -1,4 +1,4 @@
-package org.example;
+package ar.unrn.restaurante;
 
 public class Mastercard implements Tarjeta {
 

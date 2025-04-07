@@ -1,4 +1,4 @@
-package org.example;
+package ar.unrn.restaurante;
 
 public class Visa implements Tarjeta {
     private float descuento = 0.97F;

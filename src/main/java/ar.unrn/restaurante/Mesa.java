@@ -1,10 +1,10 @@
-package org.example;
+package ar.unrn.restaurante;
 
 import java.util.ArrayList;
 
 public class Mesa {
 
-    //------------------------------- ATRIBUTOS -------------------------------
+
     static final String ERROR_NUMERO_MESA = "Ya supero la creación de 10 mesas";
     private static final int CANTIDAD_MESAS_TOTALES = 10;
     private static int cantidadMesasCreadas = 0;
@@ -13,15 +13,18 @@ public class Mesa {
     private ArrayList<ItemMenu> listaDePlatos;
     private float precioTotalBebidas;
     private float precioTotalPlatos;
+    private RegistroDeCostos registro;
+    private ProveedorDeFecha proveedor;
 
-    //----------------------------- CONSTRUCTORES -----------------------------
 
-    private Mesa(int numero) {
+    private Mesa(int numero, RegistroDeCostos registro, ProveedorDeFecha proveedor) {
         this.listaDeBebidas = new ArrayList<>();
         this.listaDePlatos = new ArrayList<>();
         this.numero = numero;
         this.precioTotalBebidas = 0.0F;
         this.precioTotalPlatos = 0.0F;
+        this.registro = registro;
+        this.proveedor = proveedor;
 
 
         {
@@ -29,11 +32,10 @@ public class Mesa {
         }
     }
 
-    //-------------------------------- MÉTODOS --------------------------------
 
-    static Mesa crearMesa(int numero) {
+    static Mesa crearMesa(int numero, RegistroDeCostos registro, ProveedorDeFecha proveedorFecha) {
         assertCantidadMesas(numero);
-        return new Mesa(numero);
+        return new Mesa(numero, registro, proveedorFecha);
     }
 
     private static void assertCantidadMesas(int numero) {
@@ -65,8 +67,9 @@ public class Mesa {
     }
 
     float cerrarMesa(Tarjeta unaTarjeta, int propina) {
-
-        return unaTarjeta.calcularCosto(this, propina);
+        float costoTotal = unaTarjeta.calcularCosto(this, propina);
+        this.registro.registrarCostos(proveedor.fecha(), costoTotal);
+        return costoTotal;
     }
 
     float cerrarBebidas() {
